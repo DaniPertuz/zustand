@@ -1,7 +1,14 @@
-import { IoAccessibilityOutline, IoHeartOutline, IoListOutline, IoLockClosedOutline, IoPawOutline } from 'react-icons/io5';
-import { WhiteCard } from '../../components';
+import { IoAccessibilityOutline, IoHeartOutline, IoInformationOutline, IoListOutline, IoLockClosedOutline, IoPawOutline } from 'react-icons/io5';
+import { RequestInfor, WhiteCard } from '../../components';
+import { useAuthStore, useBearStore, usePersonStore, useTaskStore } from '../../stores';
 
 export const Dashboard = () => {
+  const totalBears = useBearStore(state => state.totalBears);
+  const firstName = usePersonStore(state => state.firstName);
+  const tasks = useTaskStore(state => state.tasks);
+  const tasksCount = Object.keys(tasks).length;
+  const username = useAuthStore(state => state.user?.fullName || 'No user');
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -11,37 +18,42 @@ export const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
         <WhiteCard centered>
-          <IoPawOutline size={ 50 } className="text-indigo-600" />
+          <IoPawOutline size={50} className="text-indigo-600" />
           <h2>Osos</h2>
-          <p>Información</p>
+          <p>{totalBears()}</p>
         </WhiteCard>
 
 
         <WhiteCard centered>
-          <IoAccessibilityOutline size={ 50 } className="text-indigo-600" />
+          <IoAccessibilityOutline size={50} className="text-indigo-600" />
           <h2>Persona</h2>
-          <p>Información</p>
+          <p>{firstName}</p>
         </WhiteCard>
 
 
         <WhiteCard centered>
-          <IoListOutline size={ 50 } className="text-indigo-600" />
+          <IoListOutline size={50} className="text-indigo-600" />
           <h2>Tareas</h2>
-          <p>Información</p>
+          <p>{tasksCount}</p>
         </WhiteCard>
 
 
         <WhiteCard centered>
-          <IoHeartOutline size={ 50 } className="text-indigo-600" />
+          <IoHeartOutline size={50} className="text-indigo-600" />
           <h2>Boda</h2>
           <p>Información</p>
         </WhiteCard>
 
 
         <WhiteCard centered>
-          <IoLockClosedOutline size={ 50 } className="text-indigo-600" />
+          <IoLockClosedOutline size={50} className="text-indigo-600" />
           <h2>Auth</h2>
-          <p>Información</p>
+          <p>{username}</p>
+        </WhiteCard>
+
+        <WhiteCard centered>
+          <IoInformationOutline size={50} className="text-indigo-600" />
+          <RequestInfor />
         </WhiteCard>
 
 

@@ -1,31 +1,42 @@
 import { FormEvent } from 'react';
+import { useAuthStore } from '../../stores';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
 
-  const onSubmit = (event: FormEvent<HTMLFormElement> ) => {
+  const navigate = useNavigate();
+
+  const loginUser = useAuthStore(state => state.loginUser);
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // const { username, password, remember } = event.target as HTMLFormElement;
-    const { username, password,remember } = event.target as typeof event.target & {
-      username: { value: string };
-      password: { value: string };
-      remember: { checked: boolean }
+    const { username, password, remember } = event.target as typeof event.target & {
+      username: { value: string; };
+      password: { value: string; };
+      remember: { checked: boolean; };
     };
     console.log(username.value, password.value, remember.checked);
-
-    username.value = '';
-    password.value = '';
-    remember.checked = false;
-  }
+    try {
+      await loginUser(username.value, password.value);
+      navigate('/dashboard');
+    } catch (error) {
+      console.log('No se pudo conectar');
+    }
+    // username.value = '';
+    // password.value = '';
+    // remember.checked = false;
+  };
 
 
   return (
     <>
       <h1 className="text-2xl font-semibold mb-4">Login</h1>
 
-      <form onSubmit={ onSubmit }>
+      <form onSubmit={onSubmit}>
 
         <div className="mb-4">
-          <label className="block text-gray-600">Username</label>
+          <label className="block text-gray-600">Email</label>
           <input type="text" name="username" autoComplete="off" />
         </div>
 
@@ -38,7 +49,7 @@ export const LoginPage = () => {
           <input type="checkbox" name="remember" className="text-blue-500" />
           <label className="text-gray-600 ml-2">Remember Me</label>
         </div>
-        
+
         <div className="mb-6 text-blue-500">
           <a href="#" className="hover:underline">Forgot Password?</a>
         </div>
